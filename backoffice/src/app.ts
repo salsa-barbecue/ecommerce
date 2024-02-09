@@ -18,6 +18,7 @@ app.use(
 
 app.use('/user', userRoutes)
 app.use('/coupon', couponRoutes)
+app.use(express.static(__dirname + '/public'))
 
 app.get('/', (req, res) => {
     res.send('Back Office!');
