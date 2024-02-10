@@ -1,8 +1,8 @@
 import {Model} from "sequelize";
-import {Coupon_type_x_image} from "./coupon_type_x_image";
+import {CouponTypeXImage} from "./couponTypeXImage";
 
 export class Image extends Model{
     id!: string;
     url!: string;
-    coupon_types_x_images?: Coupon_type_x_image[];
+    couponTypeXImages?: CouponTypeXImage[];
 }

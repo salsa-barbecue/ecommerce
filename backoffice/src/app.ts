@@ -37,6 +37,6 @@ app.listen(port, async () => {
         await initializeData()
         console.log("DATA INITIALIZED")
     }catch (e) {
-        console.log("DATABASE ERROR")
+        console.error("DATABASE ERROR", e)
     }
 });

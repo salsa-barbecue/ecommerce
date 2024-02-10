@@ -109,3 +109,70 @@ export const InitialTypeImageRelations = [
         ImageId: InitialImages[3].id
     }
 ]
+
+export const InitialTypeSizeRelations = [
+    {
+        CouponTypeId: InitialTypes[0].id,
+        CouponSizeId: InitialSizes[0].id
+    },
+    {
+        CouponTypeId: InitialTypes[0].id,
+        CouponSizeId: InitialSizes[1].id
+    },
+    {
+        CouponTypeId: InitialTypes[0].id,
+        CouponSizeId: InitialSizes[2].id
+    },
+    {
+        CouponTypeId: InitialTypes[1].id,
+        CouponSizeId: InitialSizes[1].id
+    },
+    {
+        CouponTypeId: InitialTypes[1].id,
+        CouponSizeId: InitialSizes[2].id
+    },
+    {
+        CouponTypeId: InitialTypes[1].id,
+        CouponSizeId: InitialSizes[4].id
+    },
+    {
+        CouponTypeId: InitialTypes[2].id,
+        CouponSizeId: InitialSizes[0].id
+    },
+    {
+        CouponTypeId: InitialTypes[2].id,
+        CouponSizeId: InitialSizes[1].id
+    },
+    {
+        CouponTypeId: InitialTypes[2].id,
+        CouponSizeId: InitialSizes[2].id
+    },
+    {
+        CouponTypeId: InitialTypes[2].id,
+        CouponSizeId: InitialSizes[3].id
+    },
+    {
+        CouponTypeId: InitialTypes[2].id,
+        CouponSizeId: InitialSizes[4].id
+    },
+    {
+        CouponTypeId: InitialTypes[3].id,
+        CouponSizeId: InitialSizes[0].id
+    },
+    {
+        CouponTypeId: InitialTypes[3].id,
+        CouponSizeId: InitialSizes[1].id
+    },
+    {
+        CouponTypeId: InitialTypes[3].id,
+        CouponSizeId: InitialSizes[2].id
+    },
+    {
+        CouponTypeId: InitialTypes[3].id,
+        CouponSizeId: InitialSizes[3].id
+    },
+    {
+        CouponTypeId: InitialTypes[3].id,
+        CouponSizeId: InitialSizes[4].id
+    },
+]

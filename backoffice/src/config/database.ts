@@ -1,11 +1,18 @@
 import {DataTypes, Sequelize} from "sequelize";
 import {User} from "../types/user";
 import {Coupon} from "../types/coupon";
-import {Coupon_type} from "../types/coupon_type";
+import {CouponType} from "../types/couponType";
 import {Image} from "../types/image";
-import {Coupon_size} from "../types/coupon_size";
-import {InitialSizes, InitialImages, InitialTypes, InitialTypeImageRelations} from "./initialData";
-import {Coupon_type_x_image} from "../types/coupon_type_x_image";
+import {CouponSize} from "../types/couponSize";
+import {
+    InitialSizes,
+    InitialImages,
+    InitialTypes,
+    InitialTypeImageRelations,
+    InitialTypeSizeRelations
+} from "./initialData";
+import {CouponTypeXImage} from "../types/couponTypeXImage";
+import {CouponTypeXCouponSize} from "../types/couponTypeXCouponSize";
 
 export const sequelize = new Sequelize("mysql://root:123456789@localhost:3306/db_ecommerce")
 
@@ -45,7 +52,7 @@ export const initializeDatabase = async () => {
         modelName: "Coupon"
     })
 
-    Coupon_type.init({
+    CouponType.init({
         id: {
             type: DataTypes.UUID,
             allowNull: false,
@@ -65,7 +72,7 @@ export const initializeDatabase = async () => {
         timestamps: false
     })
 
-    Coupon_size.init({
+    CouponSize.init({
         id: {
             type: DataTypes.UUID,
             allowNull: false,
@@ -101,20 +108,28 @@ export const initializeDatabase = async () => {
         timestamps: false
     })
 
-    Coupon.belongsTo(Coupon_type);
-    Coupon.belongsTo(Coupon_size);
+    Coupon.belongsTo(CouponType);
+    Coupon.belongsTo(CouponSize);
     Coupon.belongsTo(User);
-    Coupon_type.hasMany(Coupon)
-    Coupon_size.hasMany(Coupon)
+    CouponType.hasMany(Coupon)
+    CouponSize.hasMany(Coupon)
     User.hasMany(Coupon)
 
-    Coupon_type_x_image.init({}, {
+    CouponTypeXCouponSize.init({}, {
+        sequelize,
+        modelName: "CouponTypeXCouponSize",
+        timestamps: false
+    })
+    CouponType.belongsToMany(CouponSize, {through: CouponTypeXCouponSize})
+    CouponSize.belongsToMany(CouponType, {through: CouponTypeXCouponSize})
+
+    CouponTypeXImage.init({}, {
         sequelize,
         modelName: "CouponTypeXImage",
         timestamps: false
     })
-    Coupon_type.belongsToMany(Image, {through: Coupon_type_x_image})
-    Image.belongsToMany(Coupon_type, {through: Coupon_type_x_image})
+    CouponType.belongsToMany(Image, {through: CouponTypeXImage})
+    Image.belongsToMany(CouponType, {through: CouponTypeXImage})
 
     await sequelize.sync({force: true})
 }
@@ -122,8 +137,8 @@ export const initializeDatabase = async () => {
 export const initializeData = async () => {
     try{
         const createdImages:Image[] = await Image.bulkCreate(InitialImages)
-        const createdTypes:Coupon_type[] = await Coupon_type.bulkCreate(InitialTypes)
-        const createdSizes:Coupon_size[] = await Coupon_size.bulkCreate(InitialSizes)
+        const createdTypes:CouponType[] = await CouponType.bulkCreate(InitialTypes)
+        const createdSizes:CouponSize[] = await CouponSize.bulkCreate(InitialSizes)
 
         for(let i in InitialTypeImageRelations){
             let relation = InitialTypeImageRelations[i]
@@ -135,8 +150,19 @@ export const initializeData = async () => {
             }
         }
 
+        for(let i in InitialTypeSizeRelations){
+            let relation = InitialTypeSizeRelations[i]
+            let type = createdTypes.find(el => el.dataValues.id === relation.CouponTypeId)
+            let size = createdSizes.find(el => el.dataValues.id === relation.CouponSizeId)
+
+            if(type && size){
+                await type.addCouponSize(size)
+            }
+        }
+
         return true
     } catch (e) {
+        console.error(e)
         return false
     }
 }

@@ -1,7 +1,7 @@
 import {Model} from "sequelize";
 import {Coupon} from "./coupon";
 
-export class Coupon_size extends Model {
+export class CouponSize extends Model {
     id!: string;
     value!: number;
     title!: string;
