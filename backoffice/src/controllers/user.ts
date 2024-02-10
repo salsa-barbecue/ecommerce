@@ -20,7 +20,6 @@ const createUserRoute = async (req: Request, res: Response) => {
         return sendResponse(res, 200, "User created")
     } catch (e) {
         return sendResponse(res, 400, "Error in creating user")
-
     }
 }
 
@@ -33,7 +32,7 @@ const loginUserRoute = async (req: Request, res: Response) => {
     if (!passwordComparison) return sendResponse(res, 401, "Login error")
 
     const token = jwt.sign({
-        username: username,
+        user_id: currentUser.id,
     }, process.env.SECRET_KEY || '123456789')
 
     const responseData:LoginResponseDTO = {token: token}

@@ -4,6 +4,8 @@ import {Coupon} from "../types/coupon";
 import {Coupon_type} from "../types/coupon_type";
 import {Image} from "../types/image";
 import {Coupon_size} from "../types/coupon_size";
+import {InitialSizes, InitialImages, InitialTypes, InitialTypeImageRelations} from "./initialData";
+import {Coupon_type_x_image} from "../types/coupon_type_x_image";
 
 export const sequelize = new Sequelize("mysql://root:123456789@localhost:3306/db_ecommerce")
 
@@ -33,6 +35,10 @@ export const initializeDatabase = async () => {
             type: DataTypes.UUID,
             allowNull: false,
             primaryKey: true
+        },
+        isExpired: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
         }
     }, {
         sequelize,
@@ -55,7 +61,8 @@ export const initializeDatabase = async () => {
         },
     }, {
         sequelize,
-        modelName: "Coupon_type"
+        modelName: "CouponType",
+        timestamps: false
     })
 
     Coupon_size.init({
@@ -74,7 +81,8 @@ export const initializeDatabase = async () => {
         },
     }, {
         sequelize,
-        modelName: "Coupon_size"
+        modelName: "CouponSize",
+        timestamps: false
     })
 
     Image.init({
@@ -89,7 +97,8 @@ export const initializeDatabase = async () => {
         },
     }, {
         sequelize,
-        modelName: "Image"
+        modelName: "Image",
+        timestamps: false
     })
 
     Coupon.belongsTo(Coupon_type);
@@ -99,8 +108,35 @@ export const initializeDatabase = async () => {
     Coupon_size.hasMany(Coupon)
     User.hasMany(Coupon)
 
-    Coupon_type.belongsToMany(Image, {through: "CouponTypeXImage"})
-    Image.belongsToMany(Coupon_type, {through: "CouponTypeXImage"})
+    Coupon_type_x_image.init({}, {
+        sequelize,
+        modelName: "CouponTypeXImage",
+        timestamps: false
+    })
+    Coupon_type.belongsToMany(Image, {through: Coupon_type_x_image})
+    Image.belongsToMany(Coupon_type, {through: Coupon_type_x_image})
 
     await sequelize.sync({force: true})
+}
+
+export const initializeData = async () => {
+    try{
+        const createdImages:Image[] = await Image.bulkCreate(InitialImages)
+        const createdTypes:Coupon_type[] = await Coupon_type.bulkCreate(InitialTypes)
+        const createdSizes:Coupon_size[] = await Coupon_size.bulkCreate(InitialSizes)
+
+        for(let i in InitialTypeImageRelations){
+            let relation = InitialTypeImageRelations[i]
+            let type = createdTypes.find(el => el.dataValues.id === relation.CouponTypeId)
+            let image = createdImages.find(el => el.dataValues.id === relation.ImageId)
+
+            if(type && image){
+                await type.addImage(image)
+            }
+        }
+
+        return true
+    } catch (e) {
+        return false
+    }
 }

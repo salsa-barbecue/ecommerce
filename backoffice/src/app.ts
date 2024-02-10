@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from "cors";
-import {sequelize, initializeDatabase} from "./config/database";
+import {sequelize, initializeDatabase, initializeData} from "./config/database";
 
 import couponRoutes from './routes/coupon';
 import userRoutes from './routes/user';
@@ -33,6 +33,9 @@ app.listen(port, async () => {
 
         await initializeDatabase()
         console.log("DATABASE INITIALIZED")
+
+        await initializeData()
+        console.log("DATA INITIALIZED")
     }catch (e) {
         console.log("DATABASE ERROR")
     }
