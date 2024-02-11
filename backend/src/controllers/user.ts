@@ -19,6 +19,7 @@ const createUserRoute = async (req: Request, res: Response) => {
         await newUser.save()
         return sendResponse(res, 200, "User created")
     } catch (e) {
+        console.log(e)
         return sendResponse(res, 400, "Error in creating user")
     }
 }

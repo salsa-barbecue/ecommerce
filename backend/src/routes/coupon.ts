@@ -1,6 +1,6 @@
 import express from "express";
 import controller from '../controllers/coupon'
-import {verifyAuthRoute} from "../controllers/auth";
+import {verifyAuthRoute} from "../middlewares/auth";
 
 const router = express.Router();
 

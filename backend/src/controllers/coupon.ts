@@ -18,10 +18,10 @@ const createCouponRoute = async (req: Request, res: Response) => {
             isExpired: false,
         })
 
-        await newCoupon.save()
         await newCoupon.setCouponType(type_id);
         await newCoupon.setCouponSize(size_id);
         await newCoupon.setUser(user_id);
+        await newCoupon.save()
 
         const responseData:CreateCouponResponseDTO = {
             newCoupon: newCoupon
