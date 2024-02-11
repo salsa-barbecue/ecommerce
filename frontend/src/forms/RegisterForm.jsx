@@ -43,6 +43,7 @@ const RegisterForm = () => {
                 axios.request(loginCallConfig)
                     .then((response) => {
                         setToken(response.data?.data?.token)
+                        localStorage.setItem('username', username)
                         navigate("/", {replace: true});
                     })
                     .catch((error) => {

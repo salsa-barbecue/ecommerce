@@ -19,8 +19,8 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (token) {
-            axios.defaults.headers.common["Authorization"] = "Bearer " + token;
             localStorage.setItem('token',token);
+            setDefaultHeader(token)
         } else {
             delete axios.defaults.headers.common["Authorization"];
             localStorage.removeItem('token')
@@ -39,6 +39,10 @@ const AuthProvider = ({ children }) => {
         <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
     );
 };
+
+export const setDefaultHeader = (token) => {
+    axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+}
 
 export const useAuth = () => {
     return useContext(AuthContext);
