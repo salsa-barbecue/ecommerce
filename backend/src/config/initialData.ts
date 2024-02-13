@@ -27,23 +27,23 @@ export const InitialTypes = [
     {
         id: v4(),
         title: "Carrefour",
-        description: "Coupon utilizzabile nei punti vendita aderenti",
+        description: "Buono utilizzabile nei punti vendita aderenti, solo per la pasta",
 
     },
     {
         id: v4(),
         title: "Esselunga",
-        description: "Coupon utilizzabile nei punti vendita aderenti",
+        description: "Buono utilizzabile nei punti vendita aderenti",
     },
     {
         id: v4(),
         title: "Coop",
-        description: "Coupon utilizzabile nei punti vendita aderenti",
+        description: "Buono ad uso esclusivo dei dipendenti Coop",
     },
     {
         id: v4(),
         title: "Auchan",
-        description: "Coupon utilizzabile nei punti vendita aderenti",
+        description: "Buono utilizzabile nei punti vendita aderenti",
     },
 ]
 

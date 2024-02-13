@@ -6,20 +6,19 @@ export const setDefaultHeader = () => {
 }
 
 export const getAvailableCoupons = async () => {
+    //ottiene tutti i buoni disponibili, gia contenenti immagini, tipo e varie dimensioni disponibili
+
     setDefaultHeader();
     let r = await axios.get(process.env.REACT_APP_BACKEND_URL + "/coupon/available")
-    if (r.status !== 200) {
-        throw new Error(r.data?.msg)
-    }
     return r.data?.data
 }
 
 export const getUserCoupons = async () => {
+    //ottiene tutti i buoni generati dall'utente, ordinati dal piu vecchio al piu recente, con il tipo e le immagini
+    //gia collegate
+
     setDefaultHeader();
     let r = await axios.get(process.env.REACT_APP_BACKEND_URL + "/coupon/list")
-    if (r.status !== 200) {
-        throw new Error(r.data?.msg)
-    }
     let outCoupons = r.data?.data?.userCoupons.map(el => {
         let t = new Date(el.createdAt)
         el.createdAt = t.toLocaleString("it-IT")
@@ -29,6 +28,8 @@ export const getUserCoupons = async () => {
 }
 
 export const createCoupon = async (type_id, size_id) => {
+    //crea un buono, il codice utente viene preso direttamente dal backend tramite il token
+
     let payload = JSON.stringify({
         type_id: type_id,
         size_id: size_id
@@ -44,13 +45,13 @@ export const createCoupon = async (type_id, size_id) => {
     };
 
     let r = await axios.request(createCallConfig)
-    if (r.status !== 200) {
-        throw new Error(r.data?.msg)
-    }
     return r.data?.msg
 }
 
 export const doLogin = async (username, password) => {
+    //effettua il login di un utente e ne restituisce il token da inserire nelle prossime richieste, in questo
+    //caso il token viene salvato nel localStorage ma si puo' implementare anche uno store redux
+
     let payload = JSON.stringify({
         username: username,
         password: password
@@ -67,11 +68,6 @@ export const doLogin = async (username, password) => {
     };
 
     let r = await axios.request(loginCallConfig)
-
-    if (r.status !== 200) {
-        throw new Error(r.data?.msg)
-    }
-
     let generatedToken = r.data?.data?.token
     localStorage.setItem('token', generatedToken)
     setDefaultHeader(generatedToken)
@@ -80,11 +76,12 @@ export const doLogin = async (username, password) => {
 }
 
 export const doRegister = async (username, password) => {
+    //crea un utente nel database e poi chiama direttamente la funzione di login
+
     let payload = JSON.stringify({
         username: username,
         password: password
     })
-
     let registerCallConfig = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -94,15 +91,7 @@ export const doRegister = async (username, password) => {
         },
         data: payload
     };
+    await axios.request(registerCallConfig)
 
-    let rRegister = await axios.request(registerCallConfig)
-    if (rRegister.status !== 200) {
-        throw new Error(rRegister.data?.msg)
-    }
-
-    try {
-        return await doLogin(username, password)
-    } catch (e) {
-        throw new Error(e)
-    }
+    return await doLogin(username, password)
 }

@@ -12,6 +12,8 @@ import {CreateCouponResponseDTO} from "../types/dto/createCouponResponse";
 const createCouponRoute = async (req: Request, res: Response) => {
     const {user_id, type_id, size_id} = req.body
 
+    if(!user_id || !type_id || !size_id) return sendResponse(res, 400, "Valore mancante nella creazione del buono")
+
     try {
         const newCoupon = Coupon.build({
             id: v4(),
@@ -28,10 +30,10 @@ const createCouponRoute = async (req: Request, res: Response) => {
             newCoupon: newCoupon
         }
 
-        return sendResponse(res, 200, "Coupon created", responseData)
+        return sendResponse(res, 200, "Buono creato", responseData)
     } catch (e) {
         console.error(e)
-        return sendResponse(res, 400, "Error in creating coupon")
+        return sendResponse(res, 400, "Errore nella creazione del buono")
     }
 }
 
@@ -46,10 +48,10 @@ const listCouponsRoute = async (req: Request, res: Response) => {
             userCoupons: couponList,
             count: couponList.length
         }
-        return sendResponse(res, 200, "data", responseData)
+        return sendResponse(res, 200, "Lista dei buoni dell'utente ottenuta", responseData)
     } catch (e) {
         console.error(e)
-        return sendResponse(res, 400, "Error in retrieving coupon")
+        return sendResponse(res, 400, "Errore nel recupero dei buoni dell'utente")
     }
 }
 
@@ -59,10 +61,10 @@ const listAvailableCouponsRoute = async (req: Request, res: Response) => {
         const responseData:ListCouponTypesResponseDTO = {
             availableCoupons: couponList
         }
-        return sendResponse(res, 200, "data", responseData)
+        return sendResponse(res, 200, "Lista dei buoni disponibili ottenuta", responseData)
     } catch (e) {
         console.error(e)
-        return sendResponse(res, 400, "Error in retrieving coupon")
+        return sendResponse(res, 400, "Errore nel recupero dei buoni disponibili")
     }
 }
 export default {createCouponRoute, listCouponsRoute, listAvailableCouponsRoute}

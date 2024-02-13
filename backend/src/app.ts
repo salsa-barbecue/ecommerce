@@ -1,9 +1,14 @@
 import express from 'express';
 import cors from "cors";
+import dotenv from 'dotenv'
+dotenv.config()
+
 import {sequelize, initializeDatabase, initializeData} from "./config/database";
 
 import couponRoutes from './routes/coupon';
 import userRoutes from './routes/user';
+
+
 
 const app = express();
 const port = process.env.PORT || 8000;

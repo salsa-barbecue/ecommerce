@@ -2,7 +2,7 @@ const CouponTypeGrid = ({onClick = undefined, image, title, description, disable
     return (
         <div className="group relative" onClick={onClick}>
             <div
-                className={`aspect - h - 1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none ${!disabled?"group-hover:opacity-75":""} lg:h-80`}>
+                className={`aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 aspect-none ${!disabled?"group-hover:opacity-75":""} lg:h-80 sm:h-80`}>
                 <img
                     src={`http://localhost:8000/${image.url}`}
                     alt={`${image.id}`}
@@ -11,7 +11,7 @@ const CouponTypeGrid = ({onClick = undefined, image, title, description, disable
             </div>
             <div className="mt-4 flex justify-between">
                 <div>
-                    <h3 className="text-sm text-gray-700">
+                    <h3 className="text-md text-gray-700 font-bold">
                         <span aria-hidden="true" className="absolute inset-0"/>
                         {title}
                     </h3>

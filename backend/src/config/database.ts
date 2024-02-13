@@ -14,7 +14,7 @@ import {
 import {CouponTypeXImage} from "../types/couponTypeXImage";
 import {CouponTypeXCouponSize} from "../types/couponTypeXCouponSize";
 
-export const sequelize = new Sequelize("mysql://root:123456789@localhost:3306/db_ecommerce")
+export const sequelize = new Sequelize(`mysql://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_SCHEMA}`)
 
 export const initializeDatabase = async () => {
     User.init({

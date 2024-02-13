@@ -3,6 +3,7 @@ import {CouponType} from "./couponType";
 import {Image} from "./image";
 
 export class CouponTypeXImage extends Model{
-    coupon_type!: CouponType;
+    //definizione per tabella di unione
+    couponType!: CouponType;
     image!: Image;
 }
