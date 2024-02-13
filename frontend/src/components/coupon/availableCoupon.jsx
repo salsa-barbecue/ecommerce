@@ -1,8 +1,23 @@
-import { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import {Fragment, useState} from 'react'
+import {Dialog, Transition} from '@headlessui/react'
+import {XMarkIcon} from '@heroicons/react/24/outline'
+import {createCoupon} from "../../utils/queries";
+import CouponTypeGrid from "../listElements/couponTypeGrid";
+import Button from "../generalUi/button";
 
-export default function AvailableCoupon({open, setOpen}) {
+export default function AvailableCoupon({open, setOpen, coupon, onError, onSuccess}) {
+
+    const [selectedSize, setSelectedSize] = useState("");
+
+    async function handleCouponCreation() {
+        setOpen(false)
+        createCoupon(coupon.id, selectedSize).then(r => {
+            onSuccess(r)
+        }).catch(err => {
+            onError(err)
+        })
+    }
+
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -15,7 +30,7 @@ export default function AvailableCoupon({open, setOpen}) {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"/>
                 </Transition.Child>
 
                 <div className="fixed inset-0 overflow-hidden">
@@ -46,19 +61,37 @@ export default function AvailableCoupon({open, setOpen}) {
                                                 className="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                                                 onClick={() => setOpen(false)}
                                             >
-                                                <span className="absolute -inset-2.5" />
-                                                <span className="sr-only">Close panel</span>
-                                                <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                                                <span className="absolute -inset-2.5"/>
+                                                <span className="sr-only">Chiudi pannello</span>
+                                                <XMarkIcon className="h-6 w-6" aria-hidden="true"/>
                                             </button>
                                         </div>
                                     </Transition.Child>
                                     <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
                                         <div className="px-4 sm:px-6">
-                                            <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                                                Panel title
-                                            </Dialog.Title>
+                                            <CouponTypeGrid description={coupon?.description} image={coupon.Images?coupon.Images[0]:undefined}
+                                                            title={coupon?.title} disabled/>
                                         </div>
-                                        <div className="relative mt-6 flex-1 px-4 sm:px-6">{/* Your content */}</div>
+                                        <div className="relative mt-6 flex-1 px-4 sm:px-6">
+                                            <ul className="divide-y divide-gray-100 gap-6">
+                                                {coupon?.CouponSizes?.map(s => <li onClick={() => {
+                                                    setSelectedSize(s.id)
+                                                }} key={s.id}
+                                                                                   className={`flex justify-between rounded-lg my-3 p-5 ${selectedSize === s.id ? "bg-gray-300" : "bg-gray-50"}`}>
+                                                    <div className="flex min-w-0 gap-x-4">
+                                                        <div className="min-w-0 flex-auto">
+                                                            <p className={`text-sm font-semibold leading-6 text-gray-900`}>{s?.title}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                                                        <p className={`text-sm leading-6 text-gray-900`}>{s.value} €</p>
+                                                    </div>
+                                                </li>)}
+                                            </ul>
+                                            <Button onClick={handleCouponCreation}>
+                                                Acquista
+                                            </Button>
+                                        </div>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

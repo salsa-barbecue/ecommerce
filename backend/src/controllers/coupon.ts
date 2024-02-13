@@ -18,10 +18,11 @@ const createCouponRoute = async (req: Request, res: Response) => {
             isExpired: false,
         })
 
+        await newCoupon.save()
         await newCoupon.setCouponType(type_id);
         await newCoupon.setCouponSize(size_id);
         await newCoupon.setUser(user_id);
-        await newCoupon.save()
+
 
         const responseData:CreateCouponResponseDTO = {
             newCoupon: newCoupon
@@ -54,7 +55,7 @@ const listCouponsRoute = async (req: Request, res: Response) => {
 
 const listAvailableCouponsRoute = async (req: Request, res: Response) => {
     try {
-        const couponList = await CouponType.findAll({include: [Image, CouponSize]});
+        const couponList = await CouponType.findAll({include: [Image, CouponSize], order: [['CouponSizes','value', 'asc']]});
         const responseData:ListCouponTypesResponseDTO = {
             availableCoupons: couponList
         }

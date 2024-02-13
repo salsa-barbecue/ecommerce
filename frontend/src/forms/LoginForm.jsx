@@ -3,8 +3,8 @@ import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 
 import TextInput from "../components/form/textInput";
-import Button from "../components/form/button";
-import axios from "axios";
+import Button from "../components/generalUi/button";
+import {doLogin} from "../utils/queries";
 
 const LoginForm = () => {
     const {setToken} = useAuth();
@@ -13,30 +13,12 @@ const LoginForm = () => {
     const [password, setPassword] = useState("");
 
     const handleLogin = () => {
-        let payload = JSON.stringify({
-            username: username,
-            password: password
+        doLogin(username, password).then(r => {
+            setToken(r.token)
+            navigate("/", {})
+        }).catch(err => {
+            console.log(err)
         })
-        //loading animation?
-        let loginCallConfig = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'http://localhost:8000/user/login',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: payload
-        };
-
-        axios.request(loginCallConfig)
-            .then((response) => {
-                setToken(response.data?.data?.token)
-                localStorage.setItem('username', username)
-                navigate("/", {replace: true});
-            })
-            .catch((error) => {
-                console.log(error);
-            });
     };
 
     return (
@@ -80,7 +62,10 @@ const LoginForm = () => {
             </div>
             <div>
                 <Button
-                    onClick={handleLogin}
+                    onClick={(e) => {
+                        e.preventDefault()
+                        handleLogin()
+                    }}
                 >
                     Login
                 </Button>

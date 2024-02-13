@@ -1,58 +1,24 @@
-import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import TextInput from "../components/form/textInput";
-import Button from "../components/form/button";
+import Button from "../components/generalUi/button";
 import {useAuth} from "../provider/authProvider";
+import {doRegister} from "../utils/queries";
 
 const RegisterForm = () => {
     const {setToken} = useAuth();
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(undefined);
 
     //registers the new user and then logs him in automatically, saving the token in asyncstorage
     const handleRegister = () => {
-        let payload = JSON.stringify({
-            username: username,
-            password: password
+        doRegister(username, password).then(r => {
+            setToken(r.token)
+            navigate("/", {})
+        }).catch(err => {
+            console.log(err)
         })
-        //loading animation?
-        let registerCallConfig = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'http://localhost:8000/user/register',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: payload
-        };
-        let loginCallConfig = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'http://localhost:8000/user/login',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: payload
-        };
-
-        axios.request(registerCallConfig)
-            .then(() => {
-                axios.request(loginCallConfig)
-                    .then((response) => {
-                        setToken(response.data?.data?.token)
-                        localStorage.setItem('username', username)
-                        navigate("/", {replace: true});
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
     };
 
     return (
@@ -97,7 +63,6 @@ const RegisterForm = () => {
             <div>
                 <Button
                     onClick={e => {
-                        console.log("AAAAAAAAAA")
                         e.preventDefault()
                         handleRegister()
                     }}

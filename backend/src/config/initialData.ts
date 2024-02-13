@@ -19,7 +19,7 @@ export const InitialImages = [
     },
     {
         id: v4(),
-        url: "img/test.jpg"
+        url: "img/test.png"
     }
 ]
 
@@ -87,22 +87,6 @@ export const InitialTypeImageRelations = [
     {
         CouponTypeId: InitialTypes[2].id,
         ImageId: InitialImages[2].id
-    },
-    {
-        CouponTypeId: InitialTypes[3].id,
-        ImageId: InitialImages[3].id
-    },
-    {
-        CouponTypeId: InitialTypes[0].id,
-        ImageId: InitialImages[4].id
-    },
-    {
-        CouponTypeId: InitialTypes[1].id,
-        ImageId: InitialImages[4].id
-    },
-    {
-        CouponTypeId: InitialTypes[2].id,
-        ImageId: InitialImages[4].id
     },
     {
         CouponTypeId: InitialTypes[3].id,

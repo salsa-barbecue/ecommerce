@@ -6,8 +6,9 @@ import {
     useMemo,
     useState,
 } from "react";
+import {setDefaultHeader} from "../utils/queries";
 
-const AuthContext = createContext();
+const AuthContext = createContext(undefined);
 
 const AuthProvider = ({ children }) => {
 
@@ -40,9 +41,7 @@ const AuthProvider = ({ children }) => {
     );
 };
 
-export const setDefaultHeader = (token) => {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-}
+
 
 export const useAuth = () => {
     return useContext(AuthContext);

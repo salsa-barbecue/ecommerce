@@ -19,16 +19,9 @@ export class CouponType extends Model {
     typeXSizes?: CouponTypeXCouponSize[];
 
     //codice necessario per l'associazione con sequelizer + typescripts
-    public getImages!: HasManyGetAssociationsMixin<Image>;
-    public createImage!: HasManyCreateAssociationMixin<Image>;
     public addImage!: HasManyAddAssociationMixin<Image, Image["id"]>;
-    public readonly images?: Image[];
-
     //codice necessario per l'associazione con sequelizer + typescripts
-    public getCouponSizes!: HasManyGetAssociationsMixin<CouponSize>;
-    public createCouponSize!: HasManyCreateAssociationMixin<CouponSize>;
     public addCouponSize!: HasManyAddAssociationMixin<CouponSize, CouponSize["id"]>;
-    public readonly couponSizes?: CouponSize[];
     public static associations: {
         images: Association<CouponType, Image>;
         couponSizes: Association<CouponType, CouponSize>
