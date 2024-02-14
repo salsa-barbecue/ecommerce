@@ -17,6 +17,15 @@ services:
       dockerfile: Dockerfile.backend
     env_file: ./backend/.env
     ports:
-      - "8001:8001"
+      - "8000:8000"
     depends_on:
       - database
+  frontend:
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:8001
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    env_file: ./frontend/.env
+    ports:
+      - "8080:80"

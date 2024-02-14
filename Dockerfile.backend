@@ -10,12 +10,13 @@ RUN npm run compile
 FROM node:21-slim
 WORKDIR /app
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/src/public ./dist/public
 COPY ./backend/package*.json ./
 
 USER root
 RUN chmod -R 775 /app
 RUN npm install --omit=dev
-EXPOSE 8001
+EXPOSE 8000
 
 CMD ["npm", "run", "start"]
 #RUN node dist/app.js
