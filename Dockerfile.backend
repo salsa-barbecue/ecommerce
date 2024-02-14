@@ -1,0 +1,30 @@
+# Use the official Node.js image as a base image
+FROM node:20
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json to the container
+COPY ./backend/package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY ./backend .
+
+# Set environment variables
+
+ENV DB_HOST=localhost
+ENV DB_USER=root
+ENV DB_PASS=123456789
+ENV DB_PORT=3306
+ENV DB_SCHEMA=db_ecommerce
+ENV PORT=8000
+ENV SECRET_KEY=lucaleone
+
+# Expose the port the app will run on
+EXPOSE $PORT
+
+# Command to run the application
+CMD ["npm", "run", "dev"]
